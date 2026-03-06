@@ -1,0 +1,1683 @@
+{
+      "info": {
+            "name": "Japan Project - User API Collection",
+            "description": "User API collection for the Japan Project. Base URL: https://organization-71j0.onrender.com/api/v1/user. Contains all public and authenticated user routes.",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+      },
+      "auth": {
+            "type": "bearer",
+            "bearer": [
+                  {
+                        "key": "token",
+                        "value": "{{userToken}}",
+                        "type": "string"
+                  }
+            ]
+      },
+      "variable": [
+            {
+                  "key": "baseUrl",
+                  "value": "https://organization-71j0.onrender.com/api/v1/user",
+                  "type": "string"
+            }
+      ],
+      "event": [
+            {
+                  "listen": "prerequest",
+                  "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                              "// Auto-login: If userToken is not set, login automatically",
+                              "if (!pm.collectionVariables.get('userToken') && !pm.environment.get('userToken')) {",
+                              "    const loginRequest = {",
+                              "        url: pm.collectionVariables.get('baseUrl') + '/users/login',",
+                              "        method: 'POST',",
+                              "        header: { 'Content-Type': 'application/json' },",
+                              "        body: {",
+                              "            mode: 'raw',",
+                              "            raw: JSON.stringify({",
+                              "                email: pm.environment.get('userEmail') || 'newuser@example.com',",
+                              "                password: pm.environment.get('userPassword') || 'Password@123'",
+                              "            })",
+                              "        }",
+                              "    };",
+                              "    pm.sendRequest(loginRequest, function (err, response) {",
+                              "        if (!err && response.code === 200) {",
+                              "            const jsonResponse = response.json();",
+                              "            if (jsonResponse.data && jsonResponse.data.token) {",
+                              "                pm.environment.set('userToken', jsonResponse.data.token);",
+                              "                pm.environment.set('userId', jsonResponse.data.user._id);",
+                              "            }",
+                              "        }",
+                              "    });",
+                              "}"
+                        ]
+                  }
+            }
+      ],
+      "item": [
+            {
+                  "name": "Auth",
+                  "description": "User authentication endpoints - Registration, Login, Search Users",
+                  "item": [
+                        {
+                              "name": "User Registration",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 201 || pm.response.code === 200) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data.user) {",
+                                                      "        pm.environment.set('userId', jsonData.data.user._id);",
+                                                      "    }",
+                                                      "    pm.test('User registered successfully', function () {",
+                                                      "        pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                      "    });",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"username\": \"newuser123\",\n  \"password\": \"Password@123\",\n  \"fullName\": \"John Doe\",\n  \"mobileNumber\": \"+977-9841234567\",\n  \"accountType\": \"individual\",\n  \"role\": \"user\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "User Login",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 200) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data.token) {",
+                                                      "        pm.environment.set('userToken', jsonData.data.token);",
+                                                      "        pm.environment.set('userId', jsonData.data.user._id);",
+                                                      "    }",
+                                                      "    pm.test('User logged in successfully', function () {",
+                                                      "        pm.expect(jsonData.data).to.have.property('token');",
+                                                      "    });",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"Password@123\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/login",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "login"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Search Users",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"search\": \"john\",\n  \"page\": 1,\n  \"limit\": 10\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/getUsers",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "getUsers"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "User Profile",
+                  "description": "User profile management - Get/Update profile, photos, about me, certificates, portfolio, address, trial status, change password",
+                  "item": [
+                        {
+                              "name": "Get My Profile",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/me/profile",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "me",
+                                                "profile"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get User by ID",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update User",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"fullName\": \"John Doe Updated\",\n  \"mobileNumber\": \"+977-9841234568\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update Profile Photos",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"profilePicture\": \"https://example.com/profile.jpg\",\n  \"coverPhoto\": \"https://example.com/cover.jpg\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/profile-photos",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "profile-photos"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update About Me",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"professionalTitle\": \"Full Stack Developer\",\n  \"bio\": \"Passionate developer with 5 years of experience\",\n  \"skills\": [\"JavaScript\", \"TypeScript\", \"React\", \"Node.js\"]\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/about-me",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "about-me"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Add Certificate",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data._id) {",
+                                                      "        pm.environment.set('certificateId', jsonData.data._id);",
+                                                      "    }",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"name\": \"AWS Certified Developer\",\n  \"issuingOrganization\": \"Amazon Web Services\",\n  \"issueDate\": \"2024-01-15\",\n  \"credentialUrl\": \"https://aws.amazon.com/verify/cert123\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/certificates",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "certificates"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Remove Certificate",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/certificates/{{certificateId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "certificates",
+                                                "{{certificateId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Add Portfolio Project",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data._id) {",
+                                                      "        pm.environment.set('projectId', jsonData.data._id);",
+                                                      "    }",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"title\": \"E-commerce Platform\",\n  \"description\": \"Built a full-stack e-commerce platform\",\n  \"skills\": [\"React\", \"Node.js\", \"MongoDB\"],\n  \"deliverables\": [\"Web Application\", \"Admin Dashboard\"],\n  \"coverPhoto\": \"https://example.com/project.jpg\",\n  \"projectUrl\": \"https://example.com\",\n  \"startDate\": \"2023-01-01\",\n  \"endDate\": \"2023-06-30\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/portfolio",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "portfolio"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update Portfolio Project",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"title\": \"E-commerce Platform - Updated\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/portfolio/{{projectId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "portfolio",
+                                                "{{projectId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Remove Portfolio Project",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/portfolio/{{projectId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "portfolio",
+                                                "{{projectId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update Address",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"street\": \"123 Main Street\",\n  \"city\": \"Tokyo\",\n  \"state\": \"Tokyo\",\n  \"country\": \"Japan\",\n  \"postalCode\": \"100-0001\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/address",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "address"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Trial Status",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/trial-status",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "trial-status"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Change Password",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"oldPassword\": \"Password@123\",\n  \"newPassword\": \"NewPassword@123\",\n  \"confirmPassword\": \"NewPassword@123\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/users/{{userId}}/change-password",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "users",
+                                                "{{userId}}",
+                                                "change-password"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Blogs",
+                  "description": "Blog endpoints - Get blogs, like/unlike, liked users",
+                  "item": [
+                        {
+                              "name": "Get All Blogs",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs?page=1&limit=10",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs"
+                                          ],
+                                          "query": [
+                                                {
+                                                      "key": "page",
+                                                      "value": "1"
+                                                },
+                                                {
+                                                      "key": "limit",
+                                                      "value": "10"
+                                                }
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Blog by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs/{{blogId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs",
+                                                "{{blogId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Blog by Slug",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs/slug/sample-blog-post",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs",
+                                                "slug",
+                                                "sample-blog-post"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Like Blog",
+                              "request": {
+                                    "method": "POST",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs/{{blogId}}/like",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs",
+                                                "{{blogId}}",
+                                                "like"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Unlike Blog",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs/{{blogId}}/like",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs",
+                                                "{{blogId}}",
+                                                "like"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Liked Users",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs/{{blogId}}/likes",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs",
+                                                "{{blogId}}",
+                                                "likes"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get My Liked Blogs",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blogs/likes/my-likes",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blogs",
+                                                "likes",
+                                                "my-likes"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Blog Likes",
+                  "description": "Blog likes via blog-likes route",
+                  "item": [
+                        {
+                              "name": "Like Blog",
+                              "request": {
+                                    "method": "POST",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blog-likes/{{blogId}}/like",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blog-likes",
+                                                "{{blogId}}",
+                                                "like"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Unlike Blog",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blog-likes/{{blogId}}/like",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blog-likes",
+                                                "{{blogId}}",
+                                                "like"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get My Liked Blogs",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/blog-likes/likes/my-likes",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "blog-likes",
+                                                "likes",
+                                                "my-likes"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Comments",
+                  "description": "Comment CRUD on blogs",
+                  "item": [
+                        {
+                              "name": "Get Comments by Blog",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/comments/blog/{{blogId}}?page=1&limit=10",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "comments",
+                                                "blog",
+                                                "{{blogId}}"
+                                          ],
+                                          "query": [
+                                                {
+                                                      "key": "page",
+                                                      "value": "1"
+                                                },
+                                                {
+                                                      "key": "limit",
+                                                      "value": "10"
+                                                }
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Comment by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/comments/{{commentId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "comments",
+                                                "{{commentId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Create Comment",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data._id) {",
+                                                      "        pm.environment.set('commentId', jsonData.data._id);",
+                                                      "    }",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"blog\": \"{{blogId}}\",\n  \"content\": \"Great article! Very informative.\",\n  \"parentComment\": null\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/comments",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "comments"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update Comment",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"content\": \"Updated comment content\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/comments/{{commentId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "comments",
+                                                "{{commentId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Delete Comment",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/comments/{{commentId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "comments",
+                                                "{{commentId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Categories",
+                  "description": "Get categories (public)",
+                  "item": [
+                        {
+                              "name": "Get All Categories",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"page\": 1,\n  \"limit\": 10\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/categories",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "categories"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Category by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/categories/{{categoryId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "categories",
+                                                "{{categoryId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Media",
+                  "description": "Get media (public)",
+                  "item": [
+                        {
+                              "name": "Get All Media",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/media",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "media"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Testimonials",
+                  "description": "Get testimonials (public)",
+                  "item": [
+                        {
+                              "name": "Get All Testimonials",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"page\": 1,\n  \"limit\": 10\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/testimonial",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "testimonial"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Banners",
+                  "description": "Get banners (public)",
+                  "item": [
+                        {
+                              "name": "Get All Banners",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/banners?page=1&limit=10",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "banners"
+                                          ],
+                                          "query": [
+                                                {
+                                                      "key": "page",
+                                                      "value": "1"
+                                                },
+                                                {
+                                                      "key": "limit",
+                                                      "value": "10"
+                                                }
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Banner by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/banners/{{bannerId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "banners",
+                                                "{{bannerId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Banner by Slug",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/banners/slug/summer-sale",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "banners",
+                                                "slug",
+                                                "summer-sale"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Notifications",
+                  "description": "User notifications - My notifications, unread count, mark read",
+                  "item": [
+                        {
+                              "name": "Get My Notifications",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/notifications/me",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "notifications",
+                                                "me"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Unread Count",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/notifications/me/unread-count",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "notifications",
+                                                "me",
+                                                "unread-count"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Mark All as Read",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/notifications/me/read-all",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "notifications",
+                                                "me",
+                                                "read-all"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Mark as Read",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/notifications/me/{{notificationId}}/read",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "notifications",
+                                                "me",
+                                                "{{notificationId}}",
+                                                "read"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Delete My Notification",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/notifications/me/{{notificationId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "notifications",
+                                                "me",
+                                                "{{notificationId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Queries",
+                  "description": "Submit contact queries (public)",
+                  "item": [
+                        {
+                              "name": "Create Query",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data._id) {",
+                                                      "        pm.environment.set('queryId', jsonData.data._id);",
+                                                      "    }",
+                                                      "    pm.test('Query created successfully', function () {",
+                                                      "        pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                                                      "    });",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"name\": \"John Smith\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+977-9841234567\",\n  \"subject\": \"Trip Inquiry\",\n  \"message\": \"I would like to know more about the Tokyo trip package.\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/queries",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "queries"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Trips",
+                  "description": "Get trips - All, featured, by category, price range, slug, ID (public)",
+                  "item": [
+                        {
+                              "name": "Get All Trips",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/trips?page=1&limit=10",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "trips"
+                                          ],
+                                          "query": [
+                                                {
+                                                      "key": "page",
+                                                      "value": "1"
+                                                },
+                                                {
+                                                      "key": "limit",
+                                                      "value": "10"
+                                                }
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Featured Trips",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/trips/featured",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "trips",
+                                                "featured"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Trips by Category",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/trips/category/{{categoryId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "trips",
+                                                "category",
+                                                "{{categoryId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Trips by Price Range",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/trips/price-range?minPrice=100&maxPrice=2000",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "trips",
+                                                "price-range"
+                                          ],
+                                          "query": [
+                                                {
+                                                      "key": "minPrice",
+                                                      "value": "100"
+                                                },
+                                                {
+                                                      "key": "maxPrice",
+                                                      "value": "2000"
+                                                }
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Trip by Slug",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/trips/slug/7-day-tokyo-adventure",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "trips",
+                                                "slug",
+                                                "7-day-tokyo-adventure"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Trip by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/trips/{{tripId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "trips",
+                                                "{{tripId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Settings",
+                  "description": "Get settings, logos, contact, social media (public)",
+                  "item": [
+                        {
+                              "name": "Get All Settings",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/settings",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "settings"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Company Logos",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/settings/logos",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "settings",
+                                                "logos"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Logo by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/settings/logos/{{logoId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "settings",
+                                                "logos",
+                                                "{{logoId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Contact Info",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/settings/contact",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "settings",
+                                                "contact"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Social Media Links",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/settings/social-media",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "settings",
+                                                "social-media"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Social Media Link by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/settings/social-media/{{socialMediaId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "settings",
+                                                "social-media",
+                                                "{{socialMediaId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Plans",
+                  "description": "Get active plans, by type, by ID (public)",
+                  "item": [
+                        {
+                              "name": "Get Active Plans",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/plans/active",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "plans",
+                                                "active"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Plans by Type",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/plans/type/premium",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "plans",
+                                                "type",
+                                                "premium"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Plan by ID",
+                              "request": {
+                                    "auth": {
+                                          "type": "noauth"
+                                    },
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/plans/{{planId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "plans",
+                                                "{{planId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            },
+            {
+                  "name": "Locations",
+                  "description": "Location CRUD (authenticated)",
+                  "item": [
+                        {
+                              "name": "Create Location",
+                              "event": [
+                                    {
+                                          "listen": "test",
+                                          "script": {
+                                                "exec": [
+                                                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                                      "    const jsonData = pm.response.json();",
+                                                      "    if (jsonData.data && jsonData.data._id) {",
+                                                      "        pm.environment.set('locationId', jsonData.data._id);",
+                                                      "    }",
+                                                      "}"
+                                                ]
+                                          }
+                                    }
+                              ],
+                              "request": {
+                                    "method": "POST",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"latitude\": 35.6762,\n  \"longitude\": 139.6503,\n  \"address\": \"Shibuya, Tokyo, Japan\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/locations",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "locations"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get My Locations",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/locations",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "locations"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Get Location by ID",
+                              "request": {
+                                    "method": "GET",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/locations/{{locationId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "locations",
+                                                "{{locationId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Update Location",
+                              "request": {
+                                    "method": "PUT",
+                                    "header": [],
+                                    "body": {
+                                          "mode": "raw",
+                                          "raw": "{\n  \"latitude\": 35.6895,\n  \"longitude\": 139.6917,\n  \"address\": \"Shinjuku, Tokyo, Japan\"\n}",
+                                          "options": {
+                                                "raw": {
+                                                      "language": "json"
+                                                }
+                                          }
+                                    },
+                                    "url": {
+                                          "raw": "{{baseUrl}}/locations/{{locationId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "locations",
+                                                "{{locationId}}"
+                                          ]
+                                    }
+                              }
+                        },
+                        {
+                              "name": "Delete Location",
+                              "request": {
+                                    "method": "DELETE",
+                                    "header": [],
+                                    "url": {
+                                          "raw": "{{baseUrl}}/locations/{{locationId}}",
+                                          "host": [
+                                                "{{baseUrl}}"
+                                          ],
+                                          "path": [
+                                                "locations",
+                                                "{{locationId}}"
+                                          ]
+                                    }
+                              }
+                        }
+                  ]
+            }
+      ]
+}
