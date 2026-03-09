@@ -125,7 +125,8 @@ export const testimonials = [
             name: "Rajesh Sharma",
             role: "Independant Plumber",
             content:
-                  "Danfe Home Services has completely transformed my business. I get regular job leads and the payment process is seamless.",
+                  "Danfe has completely transformed my business. I get regular job leads and the payment process is seamless.",
+
             avatar: "R",
       },
       {

@@ -196,8 +196,9 @@ export default function ServicesPage() {
                                           Need a skilled professional?
                                     </h2>
                                     <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-                                          Join Danfe Home Services today. Register to grow your business or book a service instantly.
+                                          Join Danfe today. Register to grow your business or book a service instantly.
                                     </p>
+
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                           <Link href="/auth/register">
                                                 <Button

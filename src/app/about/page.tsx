@@ -92,12 +92,12 @@ export default function AboutPage() {
                                     </Badge>
                                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
                                           Elevating Home Care with{" "}
-                                          <span className="bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                                          <span className="bg-linear-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
                                                 Modern Solutions
                                           </span>
                                     </h1>
                                     <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                                          We started Danfe Home Services with a simple vision: to bring trust,
+                                          We started Danfe with a simple vision: to bring trust,
                                           quality, and professional reliability to every household in our community.
                                     </p>
                               </motion.div>
@@ -131,7 +131,7 @@ export default function AboutPage() {
                                                 <Card className="border-border/50 bg-background/50 backdrop-blur-sm h-full text-center hover:shadow-md transition-shadow">
                                                       <CardContent className="p-6">
                                                             <div
-                                                                  className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${value.gradient} shadow-lg mb-4`}
+                                                                  className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${value.gradient} shadow-lg mb-4`}
                                                             >
                                                                   <value.icon className="h-6 w-6 text-white" />
                                                             </div>
@@ -177,7 +177,7 @@ export default function AboutPage() {
                                                       <CardContent className="p-6">
                                                             <motion.div
                                                                   whileHover={{ scale: 1.05 }}
-                                                                  className={`mx-auto h-20 w-20 rounded-full bg-gradient-to-br ${member.gradient} flex items-center justify-center text-white text-2xl font-bold mb-4 shadow-lg`}
+                                                                  className={`mx-auto h-20 w-20 rounded-full bg-linear-to-br ${member.gradient} flex items-center justify-center text-white text-2xl font-bold mb-4 shadow-lg`}
                                                             >
                                                                   {member.avatar}
                                                             </motion.div>
@@ -206,16 +206,17 @@ export default function AboutPage() {
                                           Ready to experience the difference?
                                     </h2>
                                     <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-                                          Join thousands of families who trust Danfe Home Services for their daily needs.
+                                          Join thousands of families who trust Danfe for their daily needs.
                                     </p>
                                     <Link href="/auth/register">
                                           <Button
                                                 size="lg"
-                                                className="h-12 px-8 bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-xl shadow-emerald-500/25 transition-all hover:scale-105"
+                                                className="h-12 px-8 bg-linear-to-r from-emerald-600 to-green-600 text-white shadow-xl shadow-emerald-500/25 transition-all hover:scale-105"
                                           >
                                                 Join Us Today <ArrowRight className="ml-2 h-4 w-4" />
                                           </Button>
                                     </Link>
+
                               </motion.div>
                         </div>
                   </section>

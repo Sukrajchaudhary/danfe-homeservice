@@ -50,7 +50,7 @@ export function Footer() {
                                           <div className="bg-white p-2 rounded-md shadow-lg">
                                                 <div className="flex items-center gap-2">
                                                       <CheckCircle className="h-6 w-6 text-[#006767]" />
-                                                      <span className="text-[#006767] font-black text-lg tracking-tight">Danfe<br />Home Services</span>
+                                                      <span className="text-[#006767] font-black text-lg tracking-tight">Danfe</span>
                                                 </div>
                                           </div>
                                     </div>
@@ -116,7 +116,7 @@ export function Footer() {
                         <div className="border-t border-white/10 pt-8 pb-10 flex flex-col md:flex-row items-center justify-between gap-6">
                               <div className="text-center md:text-left space-y-2">
                                     <p className="text-teal-50/50 text-[11px] font-bold uppercase tracking-[0.2em]">
-                                          © 2026 Danfe Home Services. All Rights Reserved.
+                                          © 2026 Danfe. All Rights Reserved.
                                     </p>
                                     <p className="text-teal-50/40 text-[10px] font-medium tracking-wide">
                                           Professional Home Maintenance Solutions

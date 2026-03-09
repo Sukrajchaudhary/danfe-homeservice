@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Danfe Home Services - Professional Home Maintenance",
-    template: "%s | Danfe Home Services",
+    default: "Danfe - Professional Home Maintenance",
+    template: "%s | Danfe",
   },
   description:
     "Your trusted partner for professional plumbing, electrical, and essential home services. Quality maintenance made simple across Nepal.",
