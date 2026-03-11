@@ -33,7 +33,7 @@ export function Hero() {
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-teal-500/10 rounded-full blur-[100px]" />
                   </div>
 
-                  <div className="relative mx-auto max-w-7xl px-4 py-30">
+                  <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-30">
                         <motion.div
                               initial="initial"
                               animate="animate"
