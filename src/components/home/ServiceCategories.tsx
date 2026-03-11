@@ -18,14 +18,14 @@ const categories = [
 
 export function ServiceCategories() {
       return (
-            <section className="py-10 bg-white overflow-hidden">
+            <section className="py-12 bg-white overflow-hidden">
                   <div className="max-w-7xl mx-auto px-4 ">
                         <div className="text-start mb-4">
                               <h2 className="text-2xl font-semibold  tracking-tight">
                                     Find By Category                              </h2>
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-9 gap-x-6 gap-y-6 items-start">
+                        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-9 gap-x-6 gap-y-6 ">
 
                               {categories.map((category, index) => (
                                     <motion.div
@@ -46,7 +46,7 @@ export function ServiceCategories() {
                                                             priority={index < 7}
                                                       />
                                                 </div>
-                                                <span className="text-sm font-medium text-slate-600 group-hover:text-[#006767] transition-colors leading-tight">
+                                                <span className="text-xs md:text-sm font-medium text-slate-600 group-hover:text-[#006767] transition-colors leading-tight">
                                                       {category.name}
                                                 </span>
                                           </Link>

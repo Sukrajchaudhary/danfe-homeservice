@@ -34,20 +34,15 @@ const footerLinks = {
 
 export function Footer() {
       return (
-            <footer className="relative bg-[#006767] overflow-hidden">
-                  {/* Decorative Background Blobs/Shaded areas to match image */}
-                  <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
-                        <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[80%] bg-[#00a2a2] rounded-full blur-[120px]" />
-                        <div className="absolute -bottom-[30%] -right-[10%] w-[50%] h-[90%] bg-[#004d4d] rounded-full blur-[100px]" />
-                        <div className="absolute top-[20%] right-[10%] w-[30%] h-[40%] bg-[#008080] rounded-full blur-[80px]" />
-                  </div>
+            <footer className="relative bg-[#266265] overflow-hidden">
+
 
                   <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 py-16">
                               {/* Brand Section */}
                               <div className="space-y-6">
                                     <div className="flex items-center gap-2">
-                                          <div className="bg-white p-2 rounded-md shadow-lg">
+                                          <div className="bg-white p-2 rounded-xs shadow-lg">
                                                 <div className="flex items-center gap-2">
                                                       <CheckCircle className="h-6 w-6 text-[#006767]" />
                                                       <span className="text-[#006767] font-black text-lg tracking-tight">Danfe</span>

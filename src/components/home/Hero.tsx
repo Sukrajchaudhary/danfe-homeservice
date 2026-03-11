@@ -87,19 +87,10 @@ export function Hero() {
                                                 motionProps={{ variants: fadeInUp }}
                                           >
                                                 Join as Professional
-                                                <ArrowRight className="ml-2 h-4 w-4" />
+                                                <ArrowRight className="ml-2 h-6 w-6" />
                                           </PillButton>
                                     </Link>
-                                    <Link href="/services">
-                                          <PillButton
-                                                variant="outline"
-                                                size="lg"
-                                                className="h-12 px-10 text-base"
-                                                motionProps={{ variants: fadeInUp }}
-                                          >
-                                                Browse Services
-                                          </PillButton>
-                                    </Link>
+
                               </div>
 
                               {/* Stats */}

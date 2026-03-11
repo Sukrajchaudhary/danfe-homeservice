@@ -8,14 +8,14 @@ import { testimonials } from "@/config/landing-page";
 
 export function Testimonials() {
       return (
-            <section className="py-20 sm:py-32 bg-emerald-50/10">
+            <section className="py-20 bg-emerald-50/10">
                   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <motion.div
                               initial={{ opacity: 0, y: 20 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.6 }}
-                              className="text-center mb-16"
+                              className="text-center mb-8"
                         >
                               <Badge
                                     variant="secondary"
