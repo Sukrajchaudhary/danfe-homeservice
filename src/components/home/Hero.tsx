@@ -73,7 +73,7 @@ export function Hero() {
 
                               <motion.p
                                     variants={fadeInUp}
-                                    className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto"
+                                    className="mt-6 text-base sm:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto"
                               >
                                     Find verified plumbers, electricians, and service professionals.
                                     Register your skills, find quality jobs, and manage your profession with ease.
