@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import {
       Star,
@@ -42,11 +43,15 @@ export function Footer() {
                               {/* Brand Section */}
                               <div className="space-y-6">
                                     <div className="flex items-center gap-2">
-                                          <div className="bg-white p-2 rounded-xs shadow-lg">
-                                                <div className="flex items-center gap-2">
-                                                      <CheckCircle className="h-6 w-6 text-[#006767]" />
-                                                      <span className="text-[#006767] font-black text-lg tracking-tight">Danfe</span>
-                                                </div>
+                                          <div className="">
+                                                <Image
+                                                      src="/logo/logo.png"
+                                                      alt="Danfe Logo"
+                                                      width={200}
+                                                      height={80}
+                                                      className="h-20 w-auto object-contain"
+                                                      priority
+                                                />
                                           </div>
                                     </div>
 
@@ -57,22 +62,17 @@ export function Footer() {
                                     <div className="space-y-4 pt-2">
                                           <h4 className="text-white font-black text-sm uppercase tracking-widest">Customer Support</h4>
                                           <div className="space-y-3">
-                                                <a href="tel:+97723591379" className="flex items-center gap-3 text-teal-50/80 hover:text-white transition-colors group">
+                                                <a href="tel:+9779767357887" className="flex items-center gap-3 text-teal-50/80 hover:text-white transition-colors group">
                                                       <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20">
                                                             <Phone className="h-4 w-4" />
                                                       </div>
-                                                      <span className="text-sm font-bold">+977 23591379</span>
+                                                      <span className="text-sm font-bold">+977 9767357887</span>
                                                 </a>
-                                                <a href="#" className="flex items-center gap-3 text-teal-50/80 hover:text-white transition-colors group">
-                                                      <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20">
-                                                            <MessageCircle className="h-4 w-4" />
-                                                      </div>
-                                                      <span className="text-sm font-bold">WhatsApp Support</span>
-                                                </a>
+
                                           </div>
                                     </div>
 
-                                    <div className="flex items-center gap-3 pt-4">
+                                    {/* <div className="flex items-center gap-3 pt-4">
                                           {[Facebook, Instagram, Music].map((Icon, i) => (
                                                 <motion.a
                                                       key={i}
@@ -83,7 +83,7 @@ export function Footer() {
                                                       <Icon className="h-5 w-5" />
                                                 </motion.a>
                                           ))}
-                                    </div>
+                                    </div> */}
                               </div>
 
                               {/* Links Sections */}

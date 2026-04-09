@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 
 
 
@@ -42,7 +43,11 @@ export function Navbar() {
       const [isScrolled, setIsScrolled] = useState(false);
       const [selectedLocation, setSelectedLocation] = useState("Kathmandu");
 
-      const locations = ["Kathmandu", "Pokhara", "Butwal"];
+      const locations = [
+            "Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara", "Chitwan",
+            "Jhapa", "Morang", "Sunsari", "Rupandehi", "Banke",
+            "Kailali", "Makawanpur", "Parsa", "Dhanusha", "Ghorahi"
+      ];
 
 
       useEffect(() => {
@@ -55,23 +60,22 @@ export function Navbar() {
 
       return (
             <header
-                  className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${isScrolled
+                  className={`sticky top-0 z-50 w-full border-b py-1 transition-all duration-300 ${isScrolled
                         ? "border-border/60 bg-background shadow-md shadow-emerald-500/5"
                         : "border-border/40 bg-background"
                         }`}
             >
                   <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center gap-2 group">
-                              <div
-                                    className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#006767] shadow-lg shadow-teal-900/10 transition-transform duration-300 group-hover:rotate-12"
-                              >
-                                    <Sparkles className="h-5 w-5 text-white" />
-                              </div>
-                              <span className="text-xl font-black text-[#006767] tracking-tight">
-                                    Danfe
-                              </span>
-
+                        <Link href="/" className="flex items-center gap-2 group shrink-0">
+                              <Image
+                                    src="/logo/logo.png"
+                                    alt="Danfe Logo"
+                                    width={140}
+                                    height={56}
+                                    className="h-10 w-auto sm:h-12 md:h-14 object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+                                    priority
+                              />
                         </Link>
 
                         {/* Desktop Search & Tools */}
@@ -92,7 +96,7 @@ export function Navbar() {
                                                 <ChevronsUpDown className="ml-auto h-4 w-4 text-slate-400" />
                                           </div>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-[200px] p-1 shadow-xl border-slate-100" align="start">
+                                    <DropdownMenuContent className="w-[200px] max-h-[300px] overflow-y-auto p-1 shadow-xl border-slate-100" align="start">
                                           {locations.map((loc) => (
                                                 <DropdownMenuItem
                                                       key={loc}
@@ -193,9 +197,14 @@ export function Navbar() {
                                     <SheetContent side="right" className="w-80 p-0">
                                           <div className="flex flex-col h-full">
                                                 <div className="flex items-center justify-between p-4 border-b">
-                                                      <span className="text-lg font-black text-[#006767] tracking-tight">
-                                                            Danfe
-                                                      </span>
+                                                      <Image
+                                                            src="/logo/logo.png"
+                                                            alt="Danfe Logo"
+                                                            width={120}
+                                                            height={48}
+                                                            className="h-10 w-auto object-contain"
+                                                            priority
+                                                      />
                                                 </div>
 
                                                 <div className="px-4 py-2 flex flex-col gap-3 border-b">
@@ -208,7 +217,7 @@ export function Navbar() {
                                                                         <ChevronsUpDown className="ml-auto h-4 w-4 text-slate-400" />
                                                                   </div>
                                                             </DropdownMenuTrigger>
-                                                            <DropdownMenuContent className="w-[calc(100vw-64px)] mx-4 p-1 shadow-lg" align="start">
+                                                            <DropdownMenuContent className="w-[calc(100vw-64px)] max-h-[300px] overflow-y-auto mx-4 p-1 shadow-lg" align="start">
                                                                   {locations.map((loc) => (
                                                                         <DropdownMenuItem
                                                                               key={loc}
